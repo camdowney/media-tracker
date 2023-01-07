@@ -1,0 +1,29 @@
+/*
+* Utility classes that can be used anywhere
+*/
+.cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.image-center {
+  object-fit: cover;
+  object-position: center;
+}
+
+.image-top {
+  object-fit: cover;
+  object-position: top;
+}
+
+.image-bottom {
+  object-fit: cover;
+  object-position: bottom;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}

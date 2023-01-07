@@ -1,0 +1,5 @@
+export { default as Discover } from './Discover' 
+export { default as Login} from './Login'
+export { default as MyLists } from './MyLists'
+export { default as NotFound } from './NotFound'
+export { default as SingleMedia } from './SingleMedia'
