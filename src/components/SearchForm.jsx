@@ -1,26 +1,26 @@
 import { useState } from 'react'
 
-export default function SearchForm({ genres, slimByParams }) {
+export default function SearchForm({ genres, filter }) {
   const [selectedTitle, setTitle] = useState('')
   const [selectedMedia, setMediaType] = useState('')
   const [selectedGenre, setGenre] = useState('')
 
-  const titleSelector = (event) => {
-    const selected = event.target.value
+  function titleSelector(e) {
+    const selected = e.target.value
     setTitle(selected)
-    slimByParams(selected, selectedMedia, selectedGenre)
+    filter(selected, selectedMedia, selectedGenre)
   }
 
-  const mediaSelector = (event) => {
-    const selected = event.target.value
+  function mediaSelector(e) {
+    const selected = e.target.value
     setMediaType(selected)
-    slimByParams(selectedTitle, selected, selectedGenre)
+    filter(selectedTitle, selected, selectedGenre)
   }
 
-  const genreSelector = (event) => {
-    const selected = event.target.value
+  function genreSelector(e) {
+    const selected = e.target.value
     setGenre(selected)
-    slimByParams(selectedTitle, selectedMedia, selected)
+    filter(selectedTitle, selectedMedia, selected)
   }
 
   return (

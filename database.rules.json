@@ -1,6 +1,10 @@
 {
   "rules": {
-    ".read": "now < 1671775200000",
-    ".write": "now < 1671775200000"
+    "lists": {
+      "$uid": {
+        ".read": true,
+        ".write": "auth.uid === $uid"
+      }
+    }
   }
 }

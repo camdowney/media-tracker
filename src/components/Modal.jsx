@@ -5,7 +5,7 @@ export default function Modal({ id, className, children, transition = 'modal', a
   const [active, setActive] = useState(null)
   const ref = useRef()
 
-  const setModalActive = value => {
+  function setModalActive(value) {
     setActive(value)
     document.body.style.overflow = !alert && value ? 'hidden' : 'auto'
   }

@@ -1,9 +1,8 @@
 import { getAuth, EmailAuthProvider, GoogleAuthProvider } from 'firebase/auth'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
   
-import Hero from '../components/Hero'
+import { Hero } from './components'
 
 import { useEffect, useRef, useState } from 'react'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -22,50 +21,51 @@ const firebaseUIConfig = {
   },
 };
 
-export default function LoginPage() {
+export default function SignIn() {
   const auth = getAuth()
   const [user] = useAuthState(auth)
   const navigate = useNavigate()
 
   const [userSignedIn, setUserSignedIn] = useState(false)
-  const elementRef = useRef(null)
+  const firebaseuiRef = useRef(null)
 
   useEffect(() => {
     if (user) {
       navigate('/lists')
     }
 
-    const firebaseUiWidget = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebaseAuth)
-    if (uiConfig.signInFlow === 'popup')
-        firebaseUiWidget.reset()
+    const firebaseUiWidget = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth)
 
-    const unregisterAuthObserver = onAuthStateChanged(firebaseAuth, user => {
-        if (!user && userSignedIn)
-            firebaseUiWidget.reset()
-        setUserSignedIn(!!user)
+    if (firebaseUIConfig.signInFlow === 'popup') {
+      firebaseUiWidget.reset()
+    }
+
+    const unregisterAuthObserver = onAuthStateChanged(auth, user => {
+      if (!user && userSignedIn) {
+        firebaseUiWidget.reset()
+      }
+
+      setUserSignedIn(!!user)
     })
 
-    if (uiCallback)
-        uiCallback(firebaseUiWidget)
-
-    firebaseUiWidget.start(elementRef.current, uiConfig)
+    firebaseUiWidget.start(firebaseuiRef.current, firebaseUIConfig)
 
     return () => {
-        unregisterAuthObserver()
-        firebaseUiWidget.reset()
+      unregisterAuthObserver()
+      firebaseUiWidget.reset()
     }
   }, [user, navigate, auth, firebaseUIConfig, userSignedIn])
 
   return (
     <main>
-    <div>
-      <Hero title='Login to use Bucket List' />
-      <section>
-        <div className='container'>
-          <div className={className} ref={elementRef} />
-        </div>
-      </section>
-    </div>
+      <div>
+        <Hero title='Sign in to use Media Tracker' />
+        <section>
+          <div className='container'>
+            <div ref={firebaseuiRef} />
+          </div>
+        </section>
+      </div>
     </main>
   )
 }

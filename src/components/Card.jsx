@@ -9,7 +9,7 @@ export default function Card({
   year,
   genres,
   pos = 'center', 
-  description = 'No description at this time'
+  description = 'No description added.'
 }) {
   return (
     <Link

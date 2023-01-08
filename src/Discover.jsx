@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import { Hero, SearchForm, List } from '../components'
-import mediaData from '../lib/mediaData'
-import { sortByProp } from '../lib/util'
+import { Hero, SearchForm, List } from './components'
+import mediaData from './lib/mediaData'
+import { sortByProp } from './lib/util'
 
 export default function Discover() {
   const [mediaList, setList] = useState(sortByProp(mediaData, 'title'))
 
-  const slimByParams = (title, mediaType, genre) => {
+  function filter(title, mediaType, genre) {
     if (!title && !mediaType && !genre) {
       return setList(sortByProp(mediaData, 'title'))
     }
@@ -26,7 +26,7 @@ export default function Discover() {
   return (
     <main>
       <Hero title='Discover New Titles' />
-      <SearchForm slimByParams={slimByParams} genres={uniqueGenres} />
+      <SearchForm filter={filter} genres={uniqueGenres} />
       <List
         title='Results:'
         items={mediaList}

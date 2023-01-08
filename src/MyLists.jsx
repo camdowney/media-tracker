@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Hero, List, DialogModal, Checklist, Alert } from '../components'
-import { openModal, closeModal } from '../lib/util'
-import masterList from '../data/masterList'
-import { db } from '../firebase-db'
+import { Hero, List, DialogModal, Checklist, AlertModal } from './components'
+import { openModal, closeModal } from './lib/util'
+import mediaData from './lib/mediaData'
+import db from './lib/db'
 import { onValue, ref, push, update, remove } from 'firebase/database'
 import { getAuth } from 'firebase/auth'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -107,7 +107,7 @@ export default function MyLists() {
       const lists = data.map(([id, listData]) => ({
         ...listData,
         id,
-        items: listData.items?.map(id => masterList.find(item => item.id === id)),
+        items: listData.items?.map(id => mediaData.find(item => item.id === id)),
       }))
 
       setMyLists(lists)
@@ -170,24 +170,24 @@ export default function MyLists() {
         </div>
       </DialogModal>
       
-      <Alert id='alert-create-success' type='success'>
+      <AlertModal id='alert-create-success' type='success'>
         List '{document.querySelector('#new-title')?.value}' has been created!
-      </Alert>
-      <Alert id='alert-create-error' type='error'>
+      </AlertModal>
+      <AlertModal id='alert-create-error' type='error'>
         Something went wrong while creating a new list.
-      </Alert>
-      <Alert id='alert-edit-success' type='success'>
+      </AlertModal>
+      <AlertModal id='alert-edit-success' type='success'>
         Your changes have been saved!
-      </Alert>
-      <Alert id='alert-edit-error' type='error'>
+      </AlertModal>
+      <AlertModal id='alert-edit-error' type='error'>
         Something went wrong while editing this list.
-      </Alert>
-      <Alert id='alert-delete-success' type='success'>
+      </AlertModal>
+      <AlertModal id='alert-delete-success' type='success'>
         List has been deleted.
-      </Alert>
-      <Alert id='alert-delete-error' type='error'>
+      </AlertModal>
+      <AlertModal id='alert-delete-error' type='error'>
         Something went wrong while deleting this list.
-      </Alert>
+      </AlertModal>
     </main>
   )
 }

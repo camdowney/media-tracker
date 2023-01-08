@@ -1,8 +1,8 @@
 import { useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { DialogModal, Checklist, Alert } from '../components'
-import { slugify, capitalize, openModal, closeModal } from '../lib/util'
-import { db } from '../firebase-db'
+import { DialogModal, Checklist, AlertModal } from './components'
+import { slugify, capitalize, openModal, closeModal } from './lib/util'
+import db from './lib/db'
 import { onValue, ref, update } from 'firebase/database'
 import { getAuth } from 'firebase/auth'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -102,12 +102,12 @@ export default function SingleMedia() {
         </form>
       </DialogModal>
 
-      <Alert id='alert-add-success' type='success'>
+      <AlertModal id='alert-add-success' type='success'>
         Your changes have been saved!
-      </Alert>
-      <Alert id='alert-add-error' type='error'>
+      </AlertModal>
+      <AlertModal id='alert-add-error' type='error'>
         There was an issue saving your changes, please try again.
-      </Alert>
+      </AlertModal>
     </main>
   )
 }

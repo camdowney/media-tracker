@@ -4,9 +4,9 @@ import { getAuth } from 'firebase/auth'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
 import Discover from './Discover'
-import Login from './Login'
 import MyLists from './MyLists'
 import NotFound from './NotFound'
+import SignIn from './SignIn'
 import SingleMedia from './SingleMedia'
 
 export default function App() {
@@ -16,15 +16,15 @@ export default function App() {
   function Protected({ children }) {
     return user
       ? children
-      : <Navigate to='/login' />
+      : <Navigate to='/sign-in' />
   }
 
   return (
     <Router>
       <Header />
       <Routes>
-        <Route path='/' element={<Login />} />
-        <Route path='/login' element={<Login />} />
+        <Route path='/' element={<SignIn />} />
+        <Route path='/sign-in' element={<SignIn />} />
         <Route path='/lists' element={<Protected><MyLists /></Protected>}/>
         <Route path='/discover' element={<Protected><Discover /></Protected>} />
         <Route path='/single-media' element={<Protected><SingleMedia /></Protected>}/>

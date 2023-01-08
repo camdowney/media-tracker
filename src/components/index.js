@@ -1,4 +1,4 @@
-export { default as Alert } from './Alert'
+export { default as AlertModal } from './AlertModal'
 export { default as Card } from './Card'
 export { default as Checklist } from './Checklist'
 export { default as DialogModal } from './DialogModal'

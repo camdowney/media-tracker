@@ -11,13 +11,13 @@ export default function Header() {
   const closeMenu = () =>
     closeModal('#menu')
 
-  const logout = async () => {
+  async function signOut() {
     try {
       closeMenu()
       await signOut(auth)
     }
-    catch (e) {
-      console.error(e)
+    catch (err) {
+      console.error(err)
     } 
   }
   
@@ -25,10 +25,10 @@ export default function Header() {
     <>
       <header>
         <div className='container'>
-          <Link to='/lists' className='btn btn-nav'>Bucket List</Link>
+          <Link to='/lists' className='btn btn-nav'>Media Tracker</Link>
           {user && <>
             <nav>
-              <Links variant='nav' closeMenu={closeMenu} logout={logout} />
+              <Links variant='nav' closeMenu={closeMenu} signOut={signOut} />
             </nav>
             <button onClick={() => toggleModal('#menu')} className='btn btn-dark menu-btn' aria-label='Toggle menu'><i className='fa fa-bars'></i></button>
           </>}
@@ -39,16 +39,16 @@ export default function Header() {
         className='main-menu'
         transition='main-menu'
       >
-        {user && <Links variant='menu' closeMenu={closeMenu} logout={logout} />}
+        {user && <Links variant='menu' closeMenu={closeMenu} signOut={signOut} />}
       </Modal>
     </>
   )
 }
 
-const Links = ({ variant, closeMenu, logout }) => (
+const Links = ({ variant, closeMenu, signOut }) => (
   <>
     <Link to='/lists' onClick={closeMenu} className={`btn btn-${variant}`}><i className='fa fa-bookmark' /> My Lists</Link>
     <Link to='/discover' onClick={closeMenu} className={`btn btn-${variant}`}><i className='fa fa-list' /> Discover</Link>
-    <button onClick={logout} className={`btn btn-${variant}`}><i className='fa fa-sign-out' /> Logout</button>
+    <button onClick={signOut} className={`btn btn-${variant}`}><i className='fa fa-sign-out' /> Sign out</button>
   </>
 )
