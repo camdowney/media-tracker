@@ -1,5 +1,5 @@
 // Hard-coded data for simplicity, but using an API would be more appropriate in production.
-const data = [
+const mediaData = [
   {
     id: 0,
     title: 'The Shawshank Redemption',
@@ -129,4 +129,4 @@ const data = [
     pos: 'top',
   }
 ]
-export default data
+export default mediaData

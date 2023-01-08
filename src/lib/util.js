@@ -41,5 +41,5 @@ export const slugify = str =>
 export const capitalize = str => 
 	str[0].toUpperCase() + str.substring(1)
 
-export const sortBy = (arr, prop) =>
+export const sortByProp = (arr, prop) =>
 	(arr || []).sort((left, right) => left[prop] >= right[prop] ? 1 : -1)

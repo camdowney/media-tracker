@@ -41,7 +41,7 @@ export default function SearchForm({ genres, slimByParams }) {
                 <option value='book'>Books</option>
               </select>
             </div>
-            <div className='field'> {/*Dynamic load genre options from arrays*/}
+            <div className='field'>
               <label htmlFor='genre'>Genre:</label>
               <select id='genre' value={selectedGenre} onChange={genreSelector}>
                 <option value=''>Any</option>

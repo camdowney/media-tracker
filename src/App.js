@@ -1,15 +1,23 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { Header, Footer } from './components'
-import { MyLists, Discover, SingleMedia, Login, NotFound } from './pages'
 import { getAuth } from 'firebase/auth'
 import { useAuthState } from 'react-firebase-hooks/auth'
+
+import Discover from './Discover'
+import Login from './Login'
+import MyLists from './MyLists'
+import NotFound from './NotFound'
+import SingleMedia from './SingleMedia'
 
 export default function App() {
   const auth = getAuth()
   const [user] = useAuthState(auth)
 
-  const Protected = ({ children }) =>
-    user ? children : <Navigate to='/login' />
+  function Protected({ children }) {
+    return user
+      ? children
+      : <Navigate to='/login' />
+  }
 
   return (
     <Router>
