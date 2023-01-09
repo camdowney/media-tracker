@@ -4,17 +4,17 @@ export default function SearchForm({ genres, filter }) {
   let filters = useRef({})
 
   function filterByTitle(e) {
-    filters.current = { ...filters.current, title: e.target.value }
+    filters.current.title = e.target.value
     filter(filters.current)
   }
 
   function filterByType(e) {
-    filters.current = { ...filters.current, type: e.target.value }
+    filters.current.type = e.target.value
     filter(filters.current)
   }
 
   function filterByGenre(e) {
-    filters.current = { ...filters.current, genre: e.target.value }
+    filters.current.genre = e.target.value
     filter(filters.current)
   }
 
