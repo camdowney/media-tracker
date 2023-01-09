@@ -1,21 +1,11 @@
-import { useRef } from 'react'
-
 export default function SearchForm({ genres, filter }) {
-  let filters = useRef({})
-
-  function filterByTitle(e) {
-    filters.current.title = e.target.value
-    filter(filters.current)
-  }
-
-  function filterByType(e) {
-    filters.current.type = e.target.value
-    filter(filters.current)
-  }
-
-  function filterByGenre(e) {
-    filters.current.genre = e.target.value
-    filter(filters.current)
+  function updateFilters(param) {
+    return e => {
+      const urlParams = new URLSearchParams(window.location.search)
+      urlParams.set(param, e.target.value)
+      window.history.pushState({}, '', `/search?${urlParams.toString()}`)
+      filter()
+    }
   }
 
   return (
@@ -24,12 +14,12 @@ export default function SearchForm({ genres, filter }) {
         <div className='search-form'>
           <div className='field search-field'>
             <label htmlFor='title'>Title:</label>
-            <input id='title' onChange={filterByTitle} className='search-input' type='text' placeholder='Start typing here...'/>
+            <input id='title' onChange={updateFilters('title')} className='search-input' type='text' placeholder='Start typing here...'/>
           </div>
           <div className='filters'>
             <div className='field'>
               <label htmlFor='media-type'>Media:</label>
-              <select id='media-type' onChange={filterByType}>
+              <select id='media-type' onChange={updateFilters('type')}>
                 <option value=''>All</option>
                 <option value='movie'>Movies</option>
                 <option value='series'>Series</option>
@@ -38,7 +28,7 @@ export default function SearchForm({ genres, filter }) {
             </div>
             <div className='field'>
               <label htmlFor='genre'>Genre:</label>
-              <select id='genre' onChange={filterByGenre}>
+              <select id='genre' onChange={updateFilters('genre')}>
                 <option value=''>Any</option>
                 {genres.map(genre => 
                   <option key={genre} value={genre}>

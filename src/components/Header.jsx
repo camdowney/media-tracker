@@ -53,7 +53,7 @@ export default function Header() {
 const Links = ({ variant, closeMenu, signOut }) => (
   <>
     <Link to='/lists' onClick={closeMenu} className={`btn btn-${variant}`}><i className='fa fa-bookmark' /> My Lists</Link>
-    <Link to='/discover' onClick={closeMenu} className={`btn btn-${variant}`}><i className='fa fa-list' /> Discover</Link>
+    <Link to='/search' onClick={closeMenu} className={`btn btn-${variant}`}><i className='fa fa-list' /> Discover</Link>
     <button onClick={signOut} className={`btn btn-${variant}`}><i className='fa fa-sign-out' /> Sign out</button>
   </>
 )
