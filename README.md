@@ -8,4 +8,4 @@ Media Tracker allows users to view all kinds of media (series, books, etc.) and 
 
 A fully-developed version of this application would likely include the ability to share lists or even build user profiles. Additionally, it would fetch media data from multiple APIs, rather than rely on hard-coded demo data.
 
-*Please note that this application was initially developed in a group project alongside Lucas Pallone, however it has since been vastly modified to further increase originality.*
+*Please note that this application was initially developed in a group project alongside Lucas Pallone, however it has since been vastly modified in order to further increase originality.*
