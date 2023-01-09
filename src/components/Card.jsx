@@ -11,7 +11,7 @@ export default function Card({
 }) {
   return (
     <Link
-      to={`/single-media?id=${id}`}
+      to={`/media?id=${id}`}
       className='media-card'
     >
       <img

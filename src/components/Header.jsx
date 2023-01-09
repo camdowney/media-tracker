@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { Modal } from '.'
 import { useAuthUser, toggleModal, closeModal } from '../lib/util'
 import { getAuth, signOut as firebaseSignOut } from 'firebase/auth'
@@ -7,8 +8,13 @@ export default function Header() {
   const auth = getAuth()
   const user = useAuthUser()
 
-  const closeMenu = () =>
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [useLocation().pathname])
+
+  function closeMenu() {
     closeModal('#menu')
+  }
 
   async function signOut() {
     try {

@@ -17,7 +17,7 @@ export default function App() {
       return <Loading />
     }
 
-    return (!!user + !!signIn === 1)
+    return (!user != !signIn) // XOR operation - maybe not practical, but cool
       ? children
       : <Navigate to={signIn ? '/lists' : '/sign-in'} />
   }
@@ -30,7 +30,7 @@ export default function App() {
         <Route path='/sign-in' element={<Protected signIn><SignIn /></Protected>} />
         <Route path='/lists' element={<Protected><MyLists /></Protected>}/>
         <Route path='/discover' element={<Protected><Discover /></Protected>} />
-        <Route path='/single-media' element={<Protected><SingleMedia /></Protected>}/>
+        <Route path='/media' element={<Protected><SingleMedia /></Protected>}/>
         <Route path='*' element={<NotFound />} />
       </Routes>
       <Footer />

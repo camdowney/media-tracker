@@ -52,8 +52,6 @@ export default function SingleMedia() {
     }
   }
 
-  useEffect(() => window.scrollTo(0, 0), [])
-
   useEffect(() => {
     return onValue(ref(db, `lists/${user?.uid}`), snapshot => {
       if (!snapshot.exists()) {
