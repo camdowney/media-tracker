@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Hero, List, DialogModal, Checklist, AlertModal } from './components'
 import { useSubscribeLists, useListManager, openModal, closeModal } from './lib/util'
+import mediaData from './lib/mediaData'
 
 export default function MyLists() {
   const listManager = useListManager()
@@ -110,7 +111,7 @@ export default function MyLists() {
         <List
           key={index}
           title={list.title}
-          items={list.items}
+          items={list.items?.map(id => mediaData.find(media => media.id === id))}
           openEditModal={() => openEditModal(index)}
           openDeleteModal={() => openDeleteModal(index)}
         />

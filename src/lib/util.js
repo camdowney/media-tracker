@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react'
 import { getAuth } from 'firebase/auth'
-import { onValue, ref, push, update as firebaseUpdate, remove as firebaseRemove } from 'firebase/database'
+import { 
+  onValue,
+  ref,
+  push as firebasePush,
+  update as firebaseUpdate,
+  remove as firebaseRemove,
+} from 'firebase/database'
 import db from './db'
-import mediaData from './mediaData'
 
 export function useSubscribeLists() {
   const user = useAuthUser()
@@ -16,13 +21,10 @@ export function useSubscribeLists() {
         return
       }
 
-      const newLists = Object.entries(snapshot.val())
-        .map(([id, data]) => ({ 
-          ...data,
-          id,
-          items: data.items?.map(id => mediaData.find(media => media.id === id))
-        }))
-      setLists(newLists)
+      setLists(
+        Object.entries(snapshot.val())
+          .map(([id, data]) => ({ ...data, id }))
+      )
     })
   }, [user])
 
@@ -34,7 +36,7 @@ export function useListManager() {
 
   function create(data) {
     const userRef = ref(db, `lists/${user.uid}`)
-    push(userRef, data)
+    firebasePush(userRef, data)
   }
   
   function update(listID, data) {
@@ -43,6 +45,13 @@ export function useListManager() {
   
     const listRef = ref(db, `lists/${user.uid}/${listID}`)
     firebaseUpdate(listRef, data)
+  }
+
+  function updateAll(lists) {
+    lists.forEach(({ id, items }) => {
+      const listRef = ref(db, `lists/${user.uid}/${id}`)
+      firebaseUpdate(listRef, { items })
+    })
   }
   
   function remove(listID) {
@@ -56,6 +65,7 @@ export function useListManager() {
   return {
     create,
     update,
+    updateAll,
     remove,
   }
 }

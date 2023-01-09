@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DialogModal, Checklist, AlertModal } from './components'
 import { useSubscribeLists, useListManager, slugify, capitalize, openModal, closeModal } from './lib/util'
 import mediaData from './lib/mediaData'
@@ -10,11 +10,14 @@ export default function SingleMedia() {
 
   const listManager = useListManager()
   const lists = useSubscribeLists()
+  const [checklistLists, setChecklistLists] = useState(lists)
 
-  const checklistLists = lists.map(list => ({
-    ...list,
-    active: list.items?.includes(id) ? true : false,
-  }))
+  useEffect(() => {
+    setChecklistLists(lists.map(list => ({
+      ...list,
+      active: list.items?.includes(id) ? true : false,
+    })))
+  }, [lists])
   
   const [alertData, setAlertData] = useState({ type: '', text: '' })
 
@@ -28,22 +31,16 @@ export default function SingleMedia() {
 
     const checks = [...e.target.elements].slice(0, -1).map(input => input.value)
 
-    try {
-      checks.forEach((value, index) => {
-        const list = lists[index]
-
-        if (value === 'true') {
-          listManager.update(list.id, {
-            items: !list?.items ? [id] : list.items.includes(id) ? list.items : [...list.items, id],
-          })
-        }
-        else {
-          listManager.update(list.id, {
-            items: list.items?.filter(item => item !== id),
-          })
-        }
+    const newLists = lists.map((list, index) => ({
+      ...list,
+      items: checks[index] === 'true'
+        ? (list.items ? [...new Set([...list.items, id])] : [id]) // add item to list
+        : (list.items?.filter(item => item !== id) ?? null) // remove item from list
       })
+    )
 
+    try {
+      listManager.updateAll(newLists)
       openAlert('success', 'Your changes have been saved!')
     }
     catch (err) {
