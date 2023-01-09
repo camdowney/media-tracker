@@ -1,13 +1,11 @@
-import { getAuth, EmailAuthProvider, GoogleAuthProvider } from 'firebase/auth'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { useNavigate } from 'react-router-dom'
-  
-import { Hero } from './components'
 
 import { useEffect, useRef, useState } from 'react'
-import { onAuthStateChanged } from 'firebase/auth'
+import { useNavigate } from 'react-router-dom'
+import { getAuth, onAuthStateChanged, EmailAuthProvider, GoogleAuthProvider } from 'firebase/auth'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import * as firebaseui from 'firebaseui'
 import 'firebaseui/dist/firebaseui.css'
+import { Hero } from './components'
   
 const firebaseUIConfig = {
   signInOptions: [

@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { Header, Footer } from './components'
 import { getAuth } from 'firebase/auth'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { Header, Footer } from './components'
 
 import Discover from './Discover'
 import MyLists from './MyLists'
