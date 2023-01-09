@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react'
 import { onValue, ref, push, update, remove } from 'firebase/database'
-import { getAuth } from 'firebase/auth'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { Hero, List, DialogModal, Checklist, AlertModal } from './components'
-import { openModal, closeModal } from './lib/util'
+import { useAuthUser, openModal, closeModal } from './lib/util'
 import mediaData from './lib/mediaData'
 import db from './lib/db'
 
 export default function MyLists() {
-  const auth = getAuth()
-  const [user] = useAuthState(auth)
+  const user = useAuthUser()
 
   const [selectedIndex, setSelectedIndex] = useState(null)
   const [selectedTitle, setSelectedTitle] = useState('')

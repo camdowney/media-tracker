@@ -1,20 +1,19 @@
-import { useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { onValue, ref, update } from 'firebase/database'
-import { getAuth } from 'firebase/auth'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { DialogModal, Checklist, AlertModal } from './components'
-import { slugify, capitalize, openModal, closeModal } from './lib/util'
+import { useAuthUser, slugify, capitalize, openModal, closeModal } from './lib/util'
+import mediaData from './lib/mediaData'
 import db from './lib/db'
 
 export default function SingleMedia() {
-  const auth = getAuth()
-  const [user] = useAuthState(auth)
+  const user = useAuthUser()
   
   const [myLists, setMyLists] = useState([])
   const [alertData, setAlertData] = useState({ type: '', text: '' })
 
-  const { id, title, format, year, genres, description, pos } = useLocation().state
+  const urlParams = new URLSearchParams(window.location.search)
+  const mediaItem = mediaData.find(item => item.id == urlParams.get('id'))
+  const { id, title, format, year, genres, description, pos } = mediaItem
 
   function openAlert(type, text) {
     setAlertData({ type, text })
@@ -81,7 +80,7 @@ export default function SingleMedia() {
       <section>
         <div className='container single-media'>
           <div className='single-media-poster'>
-            <img src={`../../${format}/${slugify(title)}.webp`} className={`cover image-${pos}`} alt={title} />
+            <img src={`/${format}/${slugify(title)}.webp`} className={`cover image-${pos}`} alt={title} />
           </div>
           <div className='single-media-content'>
             <h1>{title} - {capitalize(format)}</h1>

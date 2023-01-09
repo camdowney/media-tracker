@@ -1,12 +1,11 @@
 import { Link } from 'react-router-dom'
 import { Modal } from '.'
-import { toggleModal, closeModal } from '../lib/util'
-import { getAuth, signOut } from 'firebase/auth'
-import { useAuthState } from 'react-firebase-hooks/auth'
+import { useAuthUser, toggleModal, closeModal } from '../lib/util'
+import { getAuth, signOut as firebaseSignOut } from 'firebase/auth'
 
 export default function Header() {
   const auth = getAuth()
-  const [user] = useAuthState(auth)
+  const user = useAuthUser()
 
   const closeMenu = () =>
     closeModal('#menu')
@@ -14,7 +13,7 @@ export default function Header() {
   async function signOut() {
     try {
       closeMenu()
-      await signOut(auth)
+      await firebaseSignOut(auth)
     }
     catch (err) {
       console.error(err)

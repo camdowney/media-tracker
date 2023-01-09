@@ -1,4 +1,16 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { getAuth } from 'firebase/auth'
+
+export const useAuthUser = () => {
+  const auth = getAuth()
+  const [user, setUser] = useState(false)
+
+  useEffect(() => {
+    auth.onAuthStateChanged(setUser)
+  }, [])
+
+  return user
+}
 
 export const useCustomListener = (ref, event, callback) => {
   useEffect(() => {
