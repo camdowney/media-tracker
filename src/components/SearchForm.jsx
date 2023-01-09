@@ -1,26 +1,21 @@
-import { useState } from 'react'
+import { useRef } from 'react'
 
 export default function SearchForm({ genres, filter }) {
-  const [selectedTitle, setTitle] = useState('')
-  const [selectedMedia, setMediaType] = useState('')
-  const [selectedGenre, setGenre] = useState('')
+  let filters = useRef({})
 
-  function titleSelector(e) {
-    const selected = e.target.value
-    setTitle(selected)
-    filter(selected, selectedMedia, selectedGenre)
+  function filterByTitle(e) {
+    filters.current = { ...filters.current, title: e.target.value }
+    filter(filters.current)
   }
 
-  function mediaSelector(e) {
-    const selected = e.target.value
-    setMediaType(selected)
-    filter(selectedTitle, selected, selectedGenre)
+  function filterByType(e) {
+    filters.current = { ...filters.current, type: e.target.value }
+    filter(filters.current)
   }
 
-  function genreSelector(e) {
-    const selected = e.target.value
-    setGenre(selected)
-    filter(selectedTitle, selectedMedia, selected)
+  function filterByGenre(e) {
+    filters.current = { ...filters.current, genre: e.target.value }
+    filter(filters.current)
   }
 
   return (
@@ -29,12 +24,12 @@ export default function SearchForm({ genres, filter }) {
         <div className='search-form'>
           <div className='field search-field'>
             <label htmlFor='title'>Title:</label>
-            <input id='title' value={selectedTitle} onChange={titleSelector} className='search-input' type='text' placeholder='Start typing here...'/>
+            <input id='title' onChange={filterByTitle} className='search-input' type='text' placeholder='Start typing here...'/>
           </div>
           <div className='filters'>
             <div className='field'>
               <label htmlFor='media-type'>Media:</label>
-              <select id='media-type' value={selectedMedia} onChange={mediaSelector}>
+              <select id='media-type' onChange={filterByType}>
                 <option value=''>All</option>
                 <option value='movie'>Movies</option>
                 <option value='series'>Series</option>
@@ -43,7 +38,7 @@ export default function SearchForm({ genres, filter }) {
             </div>
             <div className='field'>
               <label htmlFor='genre'>Genre:</label>
-              <select id='genre' value={selectedGenre} onChange={genreSelector}>
+              <select id='genre' onChange={filterByGenre}>
                 <option value=''>Any</option>
                 {genres.map(genre => 
                   <option key={genre} value={genre}>

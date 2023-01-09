@@ -6,14 +6,14 @@ import { sortByProp } from './lib/util'
 export default function Discover() {
   const [searchResults, setSearchResults] = useState(sortByProp(mediaData, 'title'))
 
-  function filter(title, mediaType, genre) {
-    if (!title && !mediaType && !genre) {
+  function filter({ title, type, genre }) {
+    if (!title && !type && !genre) {
       return setSearchResults(sortByProp(mediaData, 'title'))
     }
 
     const filtered = mediaData.filter(current => 
       (!title || current.title.toLowerCase().includes(title.toLowerCase())) 
-      && (!mediaType || current.format === mediaType) 
+      && (!type || current.format === type) 
       && (!genre || current.genres.includes(genre))
     )
     
