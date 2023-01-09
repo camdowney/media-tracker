@@ -21,18 +21,6 @@ header > .container {
   align-items: center;
 }
 
-.footer-logos {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.footer-logos img {
-  height: 3rem;
-}
-
 .list-header {
   display: flex;
   flex-direction: column;
@@ -41,7 +29,7 @@ header > .container {
 }
 
 .bg-pattern {
-  background-image: url('../../public/graphics/pattern.svg'); /* background by SVGBackgrounds.com */
+  background-image: url('/graphics/pattern.svg'); /* background by SVGBackgrounds.com */
   background-position: center;
   background-size: cover;
 }

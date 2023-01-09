@@ -24,10 +24,12 @@ const firebaseUIConfig = {
 export default function SignIn() {
   const auth = getAuth()
   const [user] = useAuthState(auth)
-  const navigate = useNavigate()
-
+  
   const [userSignedIn, setUserSignedIn] = useState(false)
+
   const firebaseuiRef = useRef(null)
+  
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (user) {

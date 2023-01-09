@@ -15,26 +15,26 @@ export default function MyLists() {
   const [selectedTitle, setSelectedTitle] = useState('')
   const [myLists, setMyLists] = useState([])
 
-  const createList = () => {
+  function createList() {
     document.querySelector('#new-title').value = ''
     openModal('#create-list')
   }
 
-  const editList = index => () => {
+  function editList(index) {
     setSelectedTitle(myLists[index]?.title ?? '')
     setSelectedIndex(index)
 
     openModal('#edit-list')
   }
 
-  const deleteList = index => () => {
+  function deleteList(index) {
     setSelectedTitle(myLists[index]?.title ?? '')
     setSelectedIndex(index)
 
     openModal('#delete-list')
   }
 
-  const handleCreate = e => {
+  function handleCreate(e) {
     e.preventDefault()
 
     try {
@@ -52,7 +52,7 @@ export default function MyLists() {
     }
   }
 
-  const handleEdit = e => {
+  function handleEdit(e) {
     e.preventDefault()
 
     const inputs = e.target.elements
@@ -78,7 +78,7 @@ export default function MyLists() {
     }
   }
 
-  const handleDelete = () => {
+  function handleDelete() {
     const id = myLists[selectedIndex]?.id
 
     try {
@@ -131,8 +131,8 @@ export default function MyLists() {
           key={index}
           title={list.title}
           items={list.items}
-          editList={editList(index)}
-          deleteList={deleteList(index)}
+          editList={() => editList(index)}
+          deleteList={() => deleteList(index)}
         />
       )}
 

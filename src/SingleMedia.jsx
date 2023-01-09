@@ -1,25 +1,25 @@
 import { useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { DialogModal, Checklist, AlertModal } from './components'
-import { slugify, capitalize, openModal, closeModal } from './lib/util'
-import db from './lib/db'
 import { onValue, ref, update } from 'firebase/database'
 import { getAuth } from 'firebase/auth'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { DialogModal, Checklist, AlertModal } from './components'
+import { slugify, capitalize, openModal, closeModal } from './lib/util'
+import db from './lib/db'
 
 export default function SingleMedia() {
   const auth = getAuth()
   const [user] = useAuthState(auth)
-
+  
   const [myLists, setMyLists] = useState([])
 
   const { id, title, format, year, genres, description, pos } = useLocation().state
 
-  const addToList = () => {
+  function addToList() {
     openModal('#add-to-lists')
   }
 
-  const handleAdd = e => {
+  function handleAdd(e) {
     e.preventDefault()
 
     const checks = [...e.target.elements].slice(0, -1).map(input => input.value)
