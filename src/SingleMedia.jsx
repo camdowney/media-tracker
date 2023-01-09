@@ -12,8 +12,14 @@ export default function SingleMedia() {
   const [user] = useAuthState(auth)
   
   const [myLists, setMyLists] = useState([])
+  const [alertData, setAlertData] = useState({ type: '', text: '' })
 
   const { id, title, format, year, genres, description, pos } = useLocation().state
+
+  function openAlert(type, text) {
+    setAlertData({ type, text })
+    openModal('#alert')
+  }
 
   function handleAddToList(e) {
     e.preventDefault()
@@ -37,10 +43,10 @@ export default function SingleMedia() {
         }
       })
 
-      openModal('#alert-add-success')
+      openAlert('success', 'Your changes have been saved!')
     }
     catch {
-      openModal('#alert-add-error')
+      openAlert('error', 'There was an issue saving your changes, please try again.')
     }
     finally {
       closeModal('#add-to-lists')
@@ -100,12 +106,8 @@ export default function SingleMedia() {
         </form>
       </DialogModal>
 
-      <AlertModal id='alert-add-success' type='success'>
-        Your changes have been saved!
-      </AlertModal>
-
-      <AlertModal id='alert-add-error' type='error'>
-        There was an issue saving your changes, please try again.
+      <AlertModal id='alert' type={alertData.type}>
+        {alertData.text}
       </AlertModal>
     </main>
   )

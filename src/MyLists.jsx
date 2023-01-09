@@ -14,6 +14,12 @@ export default function MyLists() {
   const [selectedIndex, setSelectedIndex] = useState(null)
   const [selectedTitle, setSelectedTitle] = useState('')
   const [myLists, setMyLists] = useState([])
+  const [alertData, setAlertData] = useState({ type: '', text: '' })
+
+  function openAlert(type, text) {
+    setAlertData({ type, text })
+    openModal('#alert')
+  }
 
   function createList() {
     document.querySelector('#new-title').value = ''
@@ -38,14 +44,16 @@ export default function MyLists() {
     e.preventDefault()
 
     try {
+      const newTitle = document.querySelector('#new-title')?.value
+
       push(ref(db, `lists/${user?.uid}`), {
-        title: document.querySelector('#new-title').value,
+        title: newTitle,
       })
 
-      openModal('#alert-create-success')
+      openAlert('success', `List '${newTitle}' has been created!`)
     }
     catch {
-      openModal('#alert-create-error')
+      openAlert('error', 'Something went wrong while creating a new list.')
     }
     finally {
       closeModal('#create-list')
@@ -68,13 +76,13 @@ export default function MyLists() {
         items: filtered ?? [],
       })
 
-      openModal('#alert-edit-success')
+      openAlert('success', 'Your changes have been saved!')
     }
     catch {
-      openModal('#alert-edit-error')
+      openAlert('error', 'Something went wrong while editing this list.')
     }
     finally {
-      closeModal('#edit-list');
+      closeModal('#edit-list')
     }
   }
 
@@ -87,10 +95,10 @@ export default function MyLists() {
       setSelectedIndex(null)
       setMyLists(myLists.filter(list => list.id !== id))
 
-      openModal('#alert-delete-success')
+      openAlert('success', 'List has been deleted.')
     }
     catch {
-      openModal('#alert-delete-error')
+      openAlert('error', 'Something went wrong while deleting this list.')
     }
     finally {
       closeModal('#delete-list')
@@ -169,29 +177,9 @@ export default function MyLists() {
           <button className='btn btn-dark' onClick={closeModal}>Cancel</button>
         </div>
       </DialogModal>
-      
-      <AlertModal id='alert-create-success' type='success'>
-        List '{document.querySelector('#new-title')?.value}' has been created!
-      </AlertModal>
 
-      <AlertModal id='alert-create-error' type='error'>
-        Something went wrong while creating a new list.
-      </AlertModal>
-
-      <AlertModal id='alert-edit-success' type='success'>
-        Your changes have been saved!
-      </AlertModal>
-
-      <AlertModal id='alert-edit-error' type='error'>
-        Something went wrong while editing this list.
-      </AlertModal>
-
-      <AlertModal id='alert-delete-success' type='success'>
-        List has been deleted.
-      </AlertModal>
-      
-      <AlertModal id='alert-delete-error' type='error'>
-        Something went wrong while deleting this list.
+      <AlertModal id='alert' type={alertData.type}>
+        {alertData.text}
       </AlertModal>
     </main>
   )
