@@ -4,11 +4,11 @@ import mediaData from './lib/mediaData'
 import { sortByProp } from './lib/util'
 
 export default function Discover() {
-  const [mediaList, setList] = useState(sortByProp(mediaData, 'title'))
+  const [searchResults, setSearchResults] = useState(sortByProp(mediaData, 'title'))
 
   function filter(title, mediaType, genre) {
     if (!title && !mediaType && !genre) {
-      return setList(sortByProp(mediaData, 'title'))
+      return setSearchResults(sortByProp(mediaData, 'title'))
     }
 
     const filtered = mediaData.filter(current => 
@@ -17,7 +17,7 @@ export default function Discover() {
       && (!genre || current.genres.includes(genre))
     )
     
-    setList(sortByProp(filtered, 'title'))
+    setSearchResults(sortByProp(filtered, 'title'))
   }
 
   const genres = mediaData.reduce((all, current) => all.concat(current.genres), [])
@@ -29,7 +29,7 @@ export default function Discover() {
       <SearchForm filter={filter} genres={uniqueGenres} />
       <List
         title='Results:'
-        items={mediaList}
+        items={searchResults}
         hideToolbar
       />
     </main>

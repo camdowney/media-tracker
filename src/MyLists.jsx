@@ -34,7 +34,7 @@ export default function MyLists() {
     openModal('#delete-list')
   }
 
-  function handleCreate(e) {
+  function handleCreateList(e) {
     e.preventDefault()
 
     try {
@@ -52,7 +52,7 @@ export default function MyLists() {
     }
   }
 
-  function handleEdit(e) {
+  function handleEditList(e) {
     e.preventDefault()
 
     const inputs = e.target.elements
@@ -78,7 +78,7 @@ export default function MyLists() {
     }
   }
 
-  function handleDelete() {
+  function handleDeleteList() {
     const id = myLists[selectedIndex]?.id
 
     try {
@@ -137,7 +137,7 @@ export default function MyLists() {
       )}
 
       <DialogModal id='create-list' title='Create List'>
-        <form method='post' className='create-form' onSubmit={handleCreate}>
+        <form method='post' className='create-form' onSubmit={handleCreateList}>
           <div className='vertical-field'>
             <label htmlFor='new-title'>Title:</label>
             <input id='new-title' className='input' type='text' placeholder='Start typing here...' required />
@@ -149,7 +149,7 @@ export default function MyLists() {
       </DialogModal>
 
       <DialogModal id='edit-list' title='Edit List'>
-        <form method='post' className='create-form' onSubmit={handleEdit}>
+        <form method='post' className='create-form' onSubmit={handleEditList}>
           <div className='vertical-field'>
             <label htmlFor='edit-title'>Title:</label>
             <input id='edit-title' className='input' type='text' placeholder='Start typing here...' required defaultValue={selectedTitle} />
@@ -163,7 +163,7 @@ export default function MyLists() {
 
       <DialogModal id='delete-list' title={`Delete List '${selectedTitle}'?`}>
         <div className='btn-group'>
-          <button className='btn btn-alt' onClick={handleDelete}>
+          <button className='btn btn-alt' onClick={handleDeleteList}>
             Delete list
           </button>
           <button className='btn btn-dark' onClick={closeModal}>Cancel</button>
@@ -173,18 +173,23 @@ export default function MyLists() {
       <AlertModal id='alert-create-success' type='success'>
         List '{document.querySelector('#new-title')?.value}' has been created!
       </AlertModal>
+
       <AlertModal id='alert-create-error' type='error'>
         Something went wrong while creating a new list.
       </AlertModal>
+
       <AlertModal id='alert-edit-success' type='success'>
         Your changes have been saved!
       </AlertModal>
+
       <AlertModal id='alert-edit-error' type='error'>
         Something went wrong while editing this list.
       </AlertModal>
+
       <AlertModal id='alert-delete-success' type='success'>
         List has been deleted.
       </AlertModal>
+      
       <AlertModal id='alert-delete-error' type='error'>
         Something went wrong while deleting this list.
       </AlertModal>

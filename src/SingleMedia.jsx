@@ -15,11 +15,7 @@ export default function SingleMedia() {
 
   const { id, title, format, year, genres, description, pos } = useLocation().state
 
-  function addToList() {
-    openModal('#add-to-lists')
-  }
-
-  function handleAdd(e) {
+  function handleAddToList(e) {
     e.preventDefault()
 
     const checks = [...e.target.elements].slice(0, -1).map(input => input.value)
@@ -87,14 +83,16 @@ export default function SingleMedia() {
             <p>{genres.join(' - ')}</p>
             <p className='single-media-description'>{description}</p>
             <div className='btn-group single-media-cta'>
-              <button onClick={addToList} className='btn btn-alt'><i className='fa fa-bookmark' /> Add to list</button>
+              <button onClick={() => openModal('#add-to-lists')} className='btn btn-alt'>
+                <i className='fa fa-bookmark' /> Add to list
+              </button>
             </div>
           </div>
         </div>
       </section>
 
       <DialogModal id='add-to-lists' title='Add Media to List(s)'>
-        <form method='post' className='create-form' onSubmit={handleAdd}>
+        <form method='post' className='create-form' onSubmit={handleAddToList}>
           <Checklist label='My Lists:' items={lists} />
           <div>
             <button className='btn btn-alt' type='submit'>Save changes</button>
@@ -105,6 +103,7 @@ export default function SingleMedia() {
       <AlertModal id='alert-add-success' type='success'>
         Your changes have been saved!
       </AlertModal>
+
       <AlertModal id='alert-add-error' type='error'>
         There was an issue saving your changes, please try again.
       </AlertModal>
