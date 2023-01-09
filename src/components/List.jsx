@@ -1,6 +1,6 @@
 import { Card } from '.'
 
-export default function List({ title, items, hideToolbar, editList, deleteList }) {
+export default function List({ title, items, hideToolbar, openEditModal, openDeleteModal }) {
   return (
     <section>
       <div className='container'>
@@ -8,10 +8,10 @@ export default function List({ title, items, hideToolbar, editList, deleteList }
           <h2>{title}</h2>
           {!hideToolbar && (
             <div className='btn-group'>
-              <button className='btn btn-dark' onClick={editList}>
+              <button className='btn btn-dark' onClick={openEditModal}>
                 <i className='fa fa-edit' /> Edit list
               </button>
-              <button className='btn btn-dark' onClick={deleteList}>
+              <button className='btn btn-dark' onClick={openDeleteModal}>
                 <i className='fa fa-trash' /> Delete list
               </button>
             </div>

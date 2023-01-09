@@ -1,7 +1,66 @@
 import { useEffect, useState } from 'react'
 import { getAuth } from 'firebase/auth'
+import { onValue, ref, push, update as firebaseUpdate, remove as firebaseRemove } from 'firebase/database'
+import db from './db'
+import mediaData from './mediaData'
 
-export const useAuthUser = () => {
+export function useSubscribeLists() {
+  const user = useAuthUser()
+  const [lists, setLists] = useState([])
+
+  useEffect(() => {
+    const userRef = ref(db, `lists/${user.uid}`)
+
+    return onValue(userRef, snapshot => {
+      if (!snapshot.exists()) {
+        return
+      }
+
+      const newLists = Object.entries(snapshot.val())
+        .map(([id, data]) => ({ 
+          ...data,
+          id,
+          items: data.items?.map(id => mediaData.find(media => media.id === id))
+        }))
+      setLists(newLists)
+    })
+  }, [user])
+
+  return lists
+}
+
+export function useListManager() {
+  const user = useAuthUser()
+
+  function create(data) {
+    const userRef = ref(db, `lists/${user.uid}`)
+    push(userRef, data)
+  }
+  
+  function update(listID, data) {
+    if (!listID)
+      return console.error('Missing list id.')
+  
+    const listRef = ref(db, `lists/${user.uid}/${listID}`)
+    firebaseUpdate(listRef, data)
+  }
+  
+  function remove(listID) {
+    if (!listID)
+      return console.error('Missing list id.')
+  
+    const listRef = ref(db, `/lists/${user.uid}/${listID}`)
+    firebaseRemove(listRef)
+  }
+
+  return {
+    create,
+    update,
+    remove,
+  }
+}
+
+export function useAuthUser() {
   const auth = getAuth()
   const [user, setUser] = useState(false)
 
@@ -12,7 +71,7 @@ export const useAuthUser = () => {
   return user
 }
 
-export const useCustomListener = (ref, event, callback) => {
+export function useCustomListener(ref, event, callback) {
   useEffect(() => {
     const current = ref.current
     current.addEventListener(event, callback)
@@ -20,14 +79,14 @@ export const useCustomListener = (ref, event, callback) => {
   }, [ref, event, callback])
 }
 
-export const useWindowListener = (event, callback) => {
+export function useWindowListener(event, callback) {
   useEffect(() => {
     window.addEventListener(event, callback)
     return () => window.removeEventListener(event, callback)
   }, [event, callback])
 }
 
-const signalModal = (selector, action) => {
+function signalModal(selector, action) {
   const target = typeof selector === 'string' 
     ? document.querySelector(selector)
     : selector.currentTarget.closest('.modal-wrapper')

@@ -1,77 +1,59 @@
-import { useState, useEffect } from 'react'
-import { onValue, ref, update } from 'firebase/database'
+import { useState } from 'react'
 import { DialogModal, Checklist, AlertModal } from './components'
-import { useAuthUser, slugify, capitalize, openModal, closeModal } from './lib/util'
+import { useSubscribeLists, useListManager, slugify, capitalize, openModal, closeModal } from './lib/util'
 import mediaData from './lib/mediaData'
-import db from './lib/db'
 
 export default function SingleMedia() {
-  const user = useAuthUser()
-  
-  const [myLists, setMyLists] = useState([])
-  const [alertData, setAlertData] = useState({ type: '', text: '' })
-
   const urlParams = new URLSearchParams(window.location.search)
   const mediaItem = mediaData.find(item => item.id == urlParams.get('id'))
   const { id, title, format, year, genres, description, pos } = mediaItem
+
+  const listManager = useListManager()
+  const lists = useSubscribeLists()
+
+  const checklistLists = lists.map(list => ({
+    ...list,
+    active: list.items?.includes(id) ? true : false,
+  }))
+  
+  const [alertData, setAlertData] = useState({ type: '', text: '' })
 
   function openAlert(type, text) {
     setAlertData({ type, text })
     openModal('#alert')
   }
 
-  function handleAddToList(e) {
+  function handleUpdateLists(e) {
     e.preventDefault()
 
     const checks = [...e.target.elements].slice(0, -1).map(input => input.value)
 
     try {
       checks.forEach((value, index) => {
-        const list = myLists[index]
-        const listRef = ref(db, `lists/${user?.uid}/${list.id}`)
+        const list = lists[index]
 
         if (value === 'true') {
-          update(listRef, {
-            items: !list.items ? [id] : list.items.includes(id) ? list.items : [...list.items, id]
+          listManager.update(list.id, {
+            items: !list?.items ? [id] : list.items.includes(id) ? list.items : [...list.items, id],
           })
         }
         else {
-          update(listRef, {
-            items: list.items?.filter(item => item !== id) || []
+          listManager.update(list.id, {
+            items: list.items?.filter(item => item !== id),
           })
         }
       })
 
       openAlert('success', 'Your changes have been saved!')
     }
-    catch {
-      openAlert('error', 'There was an issue saving your changes, please try again.')
+    catch (err) {
+      console.error(err)
+      openAlert('error', 'There was an error saving your changes.')
     }
     finally {
       closeModal('#add-to-lists')
     }
   }
-
-  useEffect(() => {
-    return onValue(ref(db, `lists/${user?.uid}`), snapshot => {
-      if (!snapshot.exists()) {
-        return
-      }
-
-      const data = Object.entries(snapshot.val())
-      const lists = data.map(([id, listData]) => ({
-        ...listData,
-        id,
-      }))
-
-      setMyLists(lists)
-    })
-  }, [user])
-
-  const lists = myLists.map(list => ({
-    ...list,
-    active: list.items?.includes(id) ? true : false,
-  }))
 
   return (
     <main>
@@ -95,8 +77,8 @@ export default function SingleMedia() {
       </section>
 
       <DialogModal id='add-to-lists' title='Add Media to List(s)'>
-        <form method='post' className='create-form' onSubmit={handleAddToList}>
-          <Checklist label='My Lists:' items={lists} />
+        <form method='post' className='create-form' onSubmit={handleUpdateLists}>
+          <Checklist label='My Lists:' items={checklistLists} />
           <div>
             <button className='btn btn-alt' type='submit'>Save changes</button>
           </div>

@@ -1,16 +1,13 @@
-import { useState, useEffect } from 'react'
-import { onValue, ref, push, update, remove } from 'firebase/database'
+import { useState } from 'react'
 import { Hero, List, DialogModal, Checklist, AlertModal } from './components'
-import { useAuthUser, openModal, closeModal } from './lib/util'
-import mediaData from './lib/mediaData'
-import db from './lib/db'
+import { useSubscribeLists, useListManager, openModal, closeModal } from './lib/util'
 
 export default function MyLists() {
-  const user = useAuthUser()
+  const listManager = useListManager()
+  const lists = useSubscribeLists()
 
   const [selectedIndex, setSelectedIndex] = useState(null)
   const [selectedTitle, setSelectedTitle] = useState('')
-  const [myLists, setMyLists] = useState([])
   const [alertData, setAlertData] = useState({ type: '', text: '' })
 
   function openAlert(type, text) {
@@ -18,20 +15,20 @@ export default function MyLists() {
     openModal('#alert')
   }
 
-  function createList() {
+  function openCreateModal() {
     document.querySelector('#new-title').value = ''
     openModal('#create-list')
   }
 
-  function editList(index) {
-    setSelectedTitle(myLists[index]?.title ?? '')
+  function openEditModal(index) {
+    setSelectedTitle(lists[index]?.title ?? '')
     setSelectedIndex(index)
 
     openModal('#edit-list')
   }
 
-  function deleteList(index) {
-    setSelectedTitle(myLists[index]?.title ?? '')
+  function openDeleteModal(index) {
+    setSelectedTitle(lists[index]?.title ?? '')
     setSelectedIndex(index)
 
     openModal('#delete-list')
@@ -40,17 +37,15 @@ export default function MyLists() {
   function handleCreateList(e) {
     e.preventDefault()
 
+    const title = document.querySelector('#new-title')?.value
+
     try {
-      const newTitle = document.querySelector('#new-title')?.value
-
-      push(ref(db, `lists/${user?.uid}`), {
-        title: newTitle,
-      })
-
-      openAlert('success', `List '${newTitle}' has been created!`)
+      listManager.create({ title })
+      openAlert('success', `List '${title}' has been created!`)
     }
-    catch {
-      openAlert('error', 'Something went wrong while creating a new list.')
+    catch (err) {
+      console.error(err)
+      openAlert('error', 'There was an error creating a new list.')
     }
     finally {
       closeModal('#create-list')
@@ -64,19 +59,16 @@ export default function MyLists() {
     const title = inputs[0].value
     const checks = [...inputs].slice(1, -1).map(input => input.value)
 
-    const filtered = myLists[selectedIndex].items?.filter((_, i) => checks[i] === 'true').map(list => list.id)
-    const id = myLists[selectedIndex]?.id
+    const items = lists[selectedIndex].items?.filter((_, i) => checks[i] === 'true').map(list => list.id) ?? null
+    const listID = lists[selectedIndex]?.id
 
     try {
-      update(ref(db, `lists/${user?.uid}/${id}`), {
-        title,
-        items: filtered ?? [],
-      })
-
+      listManager.update(listID, { title, items })
       openAlert('success', 'Your changes have been saved!')
     }
-    catch {
-      openAlert('error', 'Something went wrong while editing this list.')
+    catch (err) {
+      console.error(err)
+      openAlert('error', 'There was an error editing this list.')
     }
     finally {
       closeModal('#edit-list')
@@ -84,40 +76,23 @@ export default function MyLists() {
   }
 
   function handleDeleteList() {
-    const id = myLists[selectedIndex]?.id
+    const listID = lists[selectedIndex]?.id
 
     try {
-      remove(ref(db, `/lists/${user?.uid}/${id}`))
-
+      lists.splice(selectedIndex, 1) // a bit hacky; useState array methods don't trigger re-renders
       setSelectedIndex(null)
-      setMyLists(myLists.filter(list => list.id !== id))
 
+      listManager.remove(listID)
       openAlert('success', 'List has been deleted.')
     }
-    catch {
-      openAlert('error', 'Something went wrong while deleting this list.')
+    catch (err) {
+      console.error(err)
+      openAlert('error', 'There was an error deleting this list.')
     }
     finally {
       closeModal('#delete-list')
     }
   }
-
-  useEffect(() => {
-    return onValue(ref(db, `lists/${user?.uid}`), snapshot => {
-      if (!snapshot.exists()) {
-        return
-      }
-
-      const data = Object.entries(snapshot.val())
-      const lists = data.map(([id, listData]) => ({
-        ...listData,
-        id,
-        items: listData.items?.map(id => mediaData.find(item => item.id === id)),
-      }))
-
-      setMyLists(lists)
-    })
-  }, [user])
 
   return (
     <main>
@@ -125,19 +100,19 @@ export default function MyLists() {
 
       <section className='top-section'>
         <div className='container'>
-          <button className='btn btn-alt' onClick={createList}>
+          <button className='btn btn-alt' onClick={openCreateModal}>
             <i className='fa fa-plus' /> Create list
           </button>
         </div>
       </section>
 
-      {myLists?.map((list, index) =>
+      {lists?.map((list, index) =>
         <List
           key={index}
           title={list.title}
           items={list.items}
-          editList={() => editList(index)}
-          deleteList={() => deleteList(index)}
+          openEditModal={() => openEditModal(index)}
+          openDeleteModal={() => openDeleteModal(index)}
         />
       )}
 
@@ -159,7 +134,7 @@ export default function MyLists() {
             <label htmlFor='edit-title'>Title:</label>
             <input id='edit-title' className='input' type='text' placeholder='Start typing here...' required defaultValue={selectedTitle} />
           </div>
-          <Checklist label='Items:' items={myLists[selectedIndex]?.items} />
+          <Checklist label='Items:' items={lists[selectedIndex]?.items} />
           <div>
             <button className='btn btn-alt' type='submit'>Save changes</button>
           </div>
