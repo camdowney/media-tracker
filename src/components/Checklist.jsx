@@ -9,12 +9,13 @@ function reformatItemData(items) {
 }
 
 export default function Checklist({ label, items }) {
-  const [data, setData] = useState(reformatItemData(items))
+  const [data, setData] = useState([])
 
   function toggleItem(index) {
-    const item = data[index]
-    item.active = !item.active
-    setData(data)
+    setData(data.map((item, i) => ({
+      ...item,
+      active: index === i ? !item.active : item.active
+    })))
   }
 
   useEffect(() => {

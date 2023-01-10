@@ -61,11 +61,11 @@ export default function MyLists() {
     e.preventDefault()
 
     const inputs = e.target.elements
-    const title = inputs[0].value
     const checks = [...inputs].slice(1, -1).map(input => input.value)
 
-    const items = lists[selectedIndex].items?.filter((_, i) => checks[i] === 'true').map(list => list.id) ?? null
     const listID = lists[selectedIndex]?.id
+    const title = inputs[0].value
+    const items = lists[selectedIndex].items?.filter((_, i) => checks[i] === 'true')
 
     try {
       listManager.update(listID, { title, items })
