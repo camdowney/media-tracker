@@ -11,6 +11,10 @@ export default function MyLists() {
   const [selectedTitle, setSelectedTitle] = useState('')
   const [alertData, setAlertData] = useState({ type: '', text: '' })
 
+  function mapToMediaData(items) {
+    return items?.map(id => mediaData.find(media => media.id === id))
+  }
+
   function openAlert(type, text) {
     setAlertData({ type, text })
     openModal('#alert')
@@ -111,7 +115,7 @@ export default function MyLists() {
         <List
           key={index}
           title={list.title}
-          items={list.items?.map(id => mediaData.find(media => media.id === id))}
+          items={mapToMediaData(list.items)}
           openEditModal={() => openEditModal(index)}
           openDeleteModal={() => openDeleteModal(index)}
         />
@@ -135,7 +139,7 @@ export default function MyLists() {
             <label htmlFor='edit-title'>Title:</label>
             <input id='edit-title' className='input' type='text' placeholder='Start typing here...' required defaultValue={selectedTitle} />
           </div>
-          <Checklist label='Items:' items={lists[selectedIndex]?.items} />
+          <Checklist label='Items:' items={mapToMediaData(lists[selectedIndex]?.items)} />
           <div>
             <button className='btn btn-alt' type='submit'>Save changes</button>
           </div>
