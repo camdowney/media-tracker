@@ -17,7 +17,7 @@ export default function App() {
       return <Loading />
     }
 
-    return (!user != !signIn) // XOR operation - maybe not practical, but cool
+    return (signIn ? !user : user)
       ? children
       : <Navigate to={signIn ? '/lists' : '/sign-in'} />
   }

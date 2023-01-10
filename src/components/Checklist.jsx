@@ -14,7 +14,7 @@ export default function Checklist({ label, items }) {
   function toggleItem(index) {
     setData(data.map((item, i) => ({
       ...item,
-      active: index === i ? !item.active : item.active
+      active: index === i ? !item.active : item.active,
     })))
   }
 
