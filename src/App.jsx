@@ -1,13 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthUser } from './lib/util'
 import { Header, Footer } from './components'
-
-import Loading from './Loading'
-import MyLists from './MyLists'
-import NotFound from './NotFound'
-import Search from './Search'
-import SignIn from './SignIn'
-import SingleMedia from './SingleMedia'
+import {
+  Loading,
+  MyLists,
+  NotFound,
+  Search,
+  SignIn,
+  SingleMedia,
+} from './pages'
 
 export default function App() {
   const user = useAuthUser()
@@ -17,7 +18,7 @@ export default function App() {
       return <Loading />
     }
 
-    return (signIn ? !user : user)
+    return (!signIn !== !user)
       ? children
       : <Navigate to={signIn ? '/lists' : '/sign-in'} />
   }

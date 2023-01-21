@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
-import { DialogModal, Checklist, AlertModal } from './components'
-import { useSubscribeLists, useListManager, slugify, capitalize, openModal, closeModal } from './lib/util'
-import mediaData from './lib/mediaData'
+import { DialogModal, Checklist, AlertModal } from '../components'
+import { useSubscribeLists, useListManager, slugify, capitalize, openModal, closeModal } from '../lib/util'
+import mediaData from '../lib/mediaData'
 
 export default function SingleMedia() {
   const urlParams = new URLSearchParams(window.location.search)
   const mediaItem = mediaData.find(item => item.id == urlParams.get('id'))
   const { id, title, format, year, genres, description, pos } = mediaItem
 
-  const listManager = useListManager()
+  const { updateAll } = useListManager()
   const lists = useSubscribeLists()
   const [checklistLists, setChecklistLists] = useState(lists)
 
@@ -40,7 +40,7 @@ export default function SingleMedia() {
     )
 
     try {
-      listManager.updateAll(newLists)
+      updateAll(newLists)
       openAlert('success', 'Your changes have been saved!')
     }
     catch (err) {

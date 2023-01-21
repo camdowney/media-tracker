@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { Hero, List, DialogModal, Checklist, AlertModal } from './components'
-import { useSubscribeLists, useListManager, openModal, closeModal } from './lib/util'
-import mediaData from './lib/mediaData'
+import { Hero, List, DialogModal, Checklist, AlertModal } from '../components'
+import { useSubscribeLists, useListManager, openModal, closeModal } from '../lib/util'
+import mediaData from '../lib/mediaData'
 
 export default function MyLists() {
-  const listManager = useListManager()
+  const { create, update, remove } = useListManager()
   const lists = useSubscribeLists()
 
   const [selectedIndex, setSelectedIndex] = useState(null)
@@ -45,7 +45,7 @@ export default function MyLists() {
     const title = document.querySelector('#new-title')?.value
 
     try {
-      listManager.create({ title })
+      create({ title })
       openAlert('success', `List '${title}' has been created!`)
     }
     catch (err) {
@@ -65,10 +65,10 @@ export default function MyLists() {
 
     const listID = lists[selectedIndex]?.id
     const title = inputs[0].value
-    const items = lists[selectedIndex].items?.filter((_, i) => checks[i] === 'true')
+    const items = lists[selectedIndex].items?.filter((_, i) => checks[i] === 'true') ?? null
 
     try {
-      listManager.update(listID, { title, items })
+      update(listID, { title, items })
       openAlert('success', 'Your changes have been saved!')
     }
     catch (err) {
@@ -84,10 +84,10 @@ export default function MyLists() {
     const listID = lists[selectedIndex]?.id
 
     try {
-      lists.splice(selectedIndex, 1) // a bit hacky; useState array methods don't trigger re-renders
+      lists.splice(selectedIndex, 1) // useState array methods don't trigger re-renders
       setSelectedIndex(null)
 
-      listManager.remove(listID)
+      remove(listID)
       openAlert('success', 'List has been deleted.')
     }
     catch (err) {

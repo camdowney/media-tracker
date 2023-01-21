@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 import { getAuth, EmailAuthProvider, GoogleAuthProvider } from 'firebase/auth'
 import * as firebaseui from 'firebaseui'
 import 'firebaseui/dist/firebaseui.css'
-import { Hero } from './components'
+import { Hero } from '../components'
   
 const authConfig = {
   signInOptions: [

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Hero, SearchForm, List } from './components'
-import mediaData from './lib/mediaData'
-import { sortByProp } from './lib/util'
+import { Hero, SearchForm, List } from '../components'
+import mediaData from '../lib/mediaData'
+import { sortByProp } from '../lib/util'
 
 export default function Search() {
   const [searchResults, setSearchResults] = useState([])
