@@ -1,7 +1,7 @@
 # Media Tracker
 Demo full-stack app written in React + Vite and integrated with Firebase Authentication + Realtime Database.
 
-View the full application at [media-tracker-cad.vercel.app](https://media-tracker-cad.vercel.app).
+View the app at [media.camdowney.com](https://media.camdowney.com).
 
 ## About
 Media Tracker allows users to view all kinds of media (series, books, etc.) and add them to custom lists. While users may create separate lists such as "Shows To-Watch" or "Books I Recommend", the purpose of Media Tracker is to be an all-encompassing platform for any kind of media.
