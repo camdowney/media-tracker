@@ -1,5 +1,5 @@
 # Media Tracker
-Demo full-stack application written in React + Vite and integrated with Firebase Authentication + Realtime Database.
+Demo full-stack app written in React + Vite and integrated with Firebase Authentication + Realtime Database.
 
 View the full application at [media-tracker-cad.vercel.app](https://media-tracker-cad.vercel.app).
 
